@@ -2,8 +2,12 @@ language: go
 go:
   - "1.10"
 
+services:
+  - mongodb
+
 go_import_path: github.com/BeyondBankingDays/minions-api
 
 script: # the build step
+  - go test -v ./...
   - go build -o ./build/api cmd/main.go
 
