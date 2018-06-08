@@ -29,6 +29,6 @@ after_success:
   - ssh-keygen -f ~/.ssh/google_compute_engine -N ""
   # Push to Google container registry
   - docker build -t eu.gcr.io/bb-hackathon/frontend:$TRAVIS_COMMIT .
-  - gcloud container clusters get-credentials bb-hackathon
+  - gcloud container clusters get-credentials hackathon
   - gcloud docker push eu.gcr.io/bb-hackathon/frontend:$TRAVIS_COMMIT
   # - if [ "develop" == $TRAVIS_BRANCH ]; then kubectl set image deployment/frontend frontend=eu.gcr.io/bb-hackathon/frontend:$TRAVIS_COMMIT; fi
