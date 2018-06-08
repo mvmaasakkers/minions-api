@@ -4,9 +4,6 @@ go:
 
 go_import_path: github.com/BeyondBankingDays/minions-api
 
-before_script: # commands to run before the build step
-   - go get -t ./...
-
 script: # the build step
   - go build -o ./build/api cmd/main.go
 
