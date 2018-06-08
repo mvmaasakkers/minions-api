@@ -49,7 +49,12 @@ var Server = cli.Command{
 		meta := api.Meta{DB: db}
 
 		r.Handle("/v1/data", &api.DataHandler{Meta: meta}).Methods("POST", "OPTIONS")
-		r.Handle("/v1/source", &api.SourceHandler{Meta: meta}).Methods("GET", "POST", "OPTIONS")
+		r.Handle("/v1/sources", &api.SourceListHandler{Meta: meta}).Methods("GET")
+		r.Handle("/v1/sources/{id}", &api.SourceGetHandler{Meta: meta}).Methods("GET")
+		r.Handle("/v1/sources", &api.SourcePostHandler{Meta: meta}).Methods("POST")
+
+		r.Handle("/v1/challenges", &api.ChallengeListHandler{Meta: meta}).Methods("GET")
+		r.Handle("/v1/challenges/{id}", &api.ChallengeGetHandler{Meta: meta}).Methods("GET")
 
 		http.Handle("/", r)
 

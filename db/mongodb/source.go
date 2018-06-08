@@ -24,7 +24,7 @@ func (db *DB) NewSourceService() *SourceService {
 }
 
 func (s *SourceService) CreateSource(source *hackathon_api.Source) (*hackathon_api.Source, error) {
-	source.ID = bson.NewObjectId()
+	source.Id = bson.NewObjectId()
 	if err := s.database.C(s.Collection).Insert(source); err != nil {
 		return nil, err
 	}
@@ -33,12 +33,12 @@ func (s *SourceService) CreateSource(source *hackathon_api.Source) (*hackathon_a
 }
 
 func (s *SourceService) EditSource(source *hackathon_api.Source) (*hackathon_api.Source, error) {
-	originalSource, err := s.GetSource(source.ID.Hex())
+	originalSource, err := s.GetSource(source.Id.Hex())
 	if err != nil {
 		return nil, err
 	}
 
-	if err := s.database.C(s.Collection).UpdateId(originalSource.ID, source); err != nil {
+	if err := s.database.C(s.Collection).UpdateId(originalSource.Id, source); err != nil {
 		return nil, err
 	}
 
@@ -51,7 +51,7 @@ func (s *SourceService) DeleteSource(id string) (error) {
 		return err
 	}
 
-	if err := s.database.C(s.Collection).RemoveId(source.ID); err != nil {
+	if err := s.database.C(s.Collection).RemoveId(source.Id); err != nil {
 		return err
 	}
 

@@ -1,27 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: frontend
   template:
     metadata:
       labels:
-        app: api
+        app: frontend
     spec:
       containers:
-      - name: api
-        image: eu.gcr.io/bb-hackathon/hackathon-api:latest
+      - name: frontend
+        image: eu.gcr.io/bb-hackathon/frontend:latest
         imagePullPolicy: Always
-        env:
-        - name: PORT
-          value: "80"
-        - name: MONGODB
-          value: "mongodb://mongodb:27017"
-        - name: DATABASE
-          value: "hackathon_api"
         ports:
         - containerPort: 80

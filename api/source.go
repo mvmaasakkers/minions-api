@@ -6,32 +6,16 @@ import (
 	"encoding/json"
 	"gopkg.in/validator.v2"
 	"github.com/jumba-nl/hackathon-api/db/mongodb"
+	"github.com/gorilla/mux"
 )
 
-type SourceHandler struct {
+type SourceListHandler struct {
 	Meta
 	sourceService *mongodb.SourceService
 }
 
-func (h *SourceHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *SourceListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.sourceService = h.DB.NewSourceService()
-	switch r.Method {
-	case "GET":
-		if "" != r.URL.Query().Get("id") {
-			h.get(w, r)
-			return
-		}
-
-		h.list(w, r)
-	case "POST":
-		h.post(w, r)
-	case "OPTIONS":
-		JsonResponse(w, r, http.StatusOK, hackathon_api.Source{})
-		return
-	}
-}
-
-func (h *SourceHandler) list(w http.ResponseWriter, r *http.Request) {
 	sources, err := h.sourceService.ListSources()
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
@@ -41,8 +25,20 @@ func (h *SourceHandler) list(w http.ResponseWriter, r *http.Request) {
 	JsonResponse(w, r, http.StatusOK, sources)
 }
 
-func (h *SourceHandler) get(w http.ResponseWriter, r *http.Request) {
-	source, err := h.sourceService.GetSource(r.URL.Query().Get("id"))
+type SourceGetHandler struct {
+	Meta
+	sourceService *mongodb.SourceService
+}
+
+func (h *SourceGetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.sourceService = h.DB.NewSourceService()
+	vars := mux.Vars(r)
+	if _, ok  := vars["id"]; !ok {
+		JsonResponse(w, r, http.StatusBadRequest, NewApiError("no id given"))
+		return
+	}
+
+	source, err := h.sourceService.GetSource(vars["id"])
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
 		return
@@ -51,7 +47,13 @@ func (h *SourceHandler) get(w http.ResponseWriter, r *http.Request) {
 	JsonResponse(w, r, http.StatusOK, source)
 }
 
-func (h *SourceHandler) post(w http.ResponseWriter, r *http.Request) {
+type SourcePostHandler struct {
+	Meta
+	sourceService *mongodb.SourceService
+}
+
+func (h *SourcePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	h.sourceService = h.DB.NewSourceService()
 	defer r.Body.Close()
 	source := &hackathon_api.Source{}
 
