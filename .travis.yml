@@ -7,7 +7,28 @@ services:
 
 go_import_path: github.com/BeyondBankingDays/minions-api
 
+env:
+  - GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json
+
 script: # the build step
   - go test -v ./...
   - go build -o ./build/api cmd/main.go
 
+cache:
+  directories:
+    - "$HOME/google-cloud-sdk/"
+after_success:
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; curl https://sdk.cloud.google.com | bash; fi
+  # Add gcloud to $PATH
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud version
+  - gcloud --quiet components update kubectl
+  # Auth flow
+  - echo $GCLOUD_KEY | base64 --decode > $HOME/gcloud.json
+  - gcloud auth activate-service-account $GCLOUD_EMAIL --key-file $HOME/gcloud.json
+  - ssh-keygen -f ~/.ssh/google_compute_engine -N ""
+  # Push to Google container registry
+  - docker build -t eu.gcr.io/bb-hackathon/frontend:$TRAVIS_COMMIT .
+  - gcloud container clusters get-credentials bb-hackathon
+  - gcloud docker push eu.gcr.io/bb-hackathon/frontend:$TRAVIS_COMMIT
+  # - if [ "develop" == $TRAVIS_BRANCH ]; then kubectl set image deployment/frontend frontend=eu.gcr.io/bb-hackathon/frontend:$TRAVIS_COMMIT; fi
