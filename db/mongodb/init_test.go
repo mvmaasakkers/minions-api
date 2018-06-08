@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"gopkg.in/mgo.v2/dbtest"
-	"nicci.io/profile"
 	"gopkg.in/mgo.v2"
 	"log"
 	"github.com/BeyondBankingDays/minions-api"
@@ -16,7 +15,6 @@ var (
 	// server runs a MongoDB server on a random port and storing data in temp dir.
 	server dbtest.DBServer
 	// testDb provides a disposable profile.DB implementation.
-	testDb  profile.DB
 	session *mgo.Session
 
 	db *DB
