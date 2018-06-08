@@ -2,7 +2,7 @@ package api
 
 import (
 	"net/http"
-	"github.com/jumba-nl/hackathon-api"
+	"github.com/BeyondBankingDays/minions-api"
 	"encoding/json"
 	"time"
 	"gopkg.in/validator.v2"

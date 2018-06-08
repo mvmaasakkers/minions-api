@@ -9,7 +9,7 @@ import (
 	"nicci.io/profile"
 	"gopkg.in/mgo.v2"
 	"log"
-	"github.com/jumba-nl/hackathon-api"
+	"github.com/BeyondBankingDays/minions-api"
 )
 
 var (

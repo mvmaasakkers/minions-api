@@ -1,16 +1,16 @@
 package mongodb
 
 import (
-	"github.com/jumba-nl/hackathon-api"
+	"github.com/BeyondBankingDays/minions-api"
 	"gopkg.in/mgo.v2"
 	"log"
 	"gopkg.in/mgo.v2/bson"
 )
 
 type DataService struct {
-	DB *DB
+	DB         *DB
 	Collection string
-	database *mgo.Database
+	database   *mgo.Database
 }
 
 func (db *DB) NewDataService() *DataService {

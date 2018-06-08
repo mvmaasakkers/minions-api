@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	"github.com/jumba-nl/hackathon-api"
+	"github.com/BeyondBankingDays/minions-api"
 	"gopkg.in/mgo.v2"
 	"log"
 	"gopkg.in/mgo.v2/bson"

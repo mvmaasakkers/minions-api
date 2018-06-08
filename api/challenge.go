@@ -2,8 +2,8 @@ package api
 
 import (
 	"net/http"
-	"github.com/jumba-nl/hackathon-api"
-	"github.com/jumba-nl/hackathon-api/db/mongodb"
+	"github.com/BeyondBankingDays/minions-api"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 	"github.com/gorilla/mux"
 )
 

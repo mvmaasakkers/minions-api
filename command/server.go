@@ -3,10 +3,10 @@ package command
 import (
 	"github.com/urfave/cli"
 	"github.com/gorilla/mux"
-	"github.com/jumba-nl/hackathon-api/api"
+	"github.com/BeyondBankingDays/minions-api/api"
 	"net/http"
 	"log"
-	"github.com/jumba-nl/hackathon-api/db/mongodb"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 var Server = cli.Command{

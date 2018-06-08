@@ -4,7 +4,7 @@ import (
 	"github.com/urfave/cli"
 	"fmt"
 	"os"
-	"github.com/jumba-nl/hackathon-api/command"
+	"github.com/BeyondBankingDays/minions-api/command"
 )
 
 func main() {

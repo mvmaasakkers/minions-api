@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/jumba-nl/hackathon-api/db/mongodb"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 type Meta struct {
