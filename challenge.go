@@ -10,39 +10,14 @@ type Challenge struct {
 
 var Challenges []Challenge
 
-
 func init() {
 	Challenges = []Challenge{
-		{
-			"zonnecollectoren",
-			"Zonnecollectoren",
-			350,
-		},
-		{
-			"energielabel",
-			"Energielabel",
-			100,
-		},
-		{
-			"spouwmuur",
-			"Spouwmuur",
-			500,
-		},
-		{
-			"vloer_bodem_isolatie",
-			"Vloer bodem isolatie",
-			350,
-		},
-		{
-			"dakisolatie",
-			"Dakisolatie",
-			500,
-		},
-		{
-			"hr_ketel",
-			"HR ketel",
-			250,
-		},
+		{"zonnecollectoren", "Zonnecollectoren", 350},
+		{"energielabel", "Energielabel", 100},
+		{"spouwmuur", "Spouwmuur", 500},
+		{"vloer_bodem_isolatie", "Vloer bodem isolatie", 350},
+		{"dakisolatie", "Dakisolatie", 500},
+		{"hr_ketel", "HR ketel", 250},
 	}
 }
 
