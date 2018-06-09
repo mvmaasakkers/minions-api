@@ -28,6 +28,38 @@ func TestMeta_GetUserHandler(t *testing.T) {
 			User:       userFixtures["fourth"],
 			StatusCode: http.StatusOK,
 		},
+		{
+			User:       userFixtures["first"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["second"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["third"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["fourth"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["first"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["second"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["third"],
+			StatusCode: http.StatusOK,
+		},
+		{
+			User:       userFixtures["fourth"],
+			StatusCode: http.StatusOK,
+		},
 	}
 	meta := Meta{DB: *db}
 
