@@ -9,6 +9,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"github.com/BeyondBankingDays/minions-api"
+	"gopkg.in/mgo.v2/bson"
 )
 
 var (
@@ -50,13 +51,14 @@ func runTests(m *testing.M, tempDir string) int {
 	return m.Run()
 }
 
-var sources = map[string]*hackathon_api.Source{
-	"first": {Id: "first", Name: "__ops"},
+var sourceFixtures = map[string]*hackathon_api.Source{
+	"first": {Id: bson.NewObjectId(), Name: "first"},
+	"second": {Id: bson.NewObjectId(), Name: "second"},
 }
 
 func installFixtures(db *DB) {
 	sourceService := db.NewSourceService()
-	for _, item := range sources {
+	for _, item := range sourceFixtures {
 		if _, err := sourceService.CreateSource(item); err != nil {
 			log.Println(err)
 		}

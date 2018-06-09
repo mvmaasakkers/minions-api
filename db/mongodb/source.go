@@ -5,6 +5,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"gopkg.in/mgo.v2/bson"
+	"errors"
 )
 
 type SourceService struct {
@@ -33,6 +34,9 @@ func (s *SourceService) CreateSource(source *hackathon_api.Source) (*hackathon_a
 }
 
 func (s *SourceService) EditSource(source *hackathon_api.Source) (*hackathon_api.Source, error) {
+	if source == nil {
+		return nil, errors.New("cannot be nil")
+	}
 	originalSource, err := s.GetSource(source.Id.Hex())
 	if err != nil {
 		return nil, err
@@ -59,6 +63,10 @@ func (s *SourceService) DeleteSource(id string) (error) {
 }
 
 func (s *SourceService) GetSource(id string) (*hackathon_api.Source, error) {
+	if !bson.IsObjectIdHex(id) {
+		return nil, errors.New("invalid object id")
+	}
+
 	bsonId := bson.ObjectIdHex(id)
 	source := &hackathon_api.Source{}
 	if err := s.database.C(s.Collection).FindId(bsonId).One(source); err != nil {
