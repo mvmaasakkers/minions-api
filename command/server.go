@@ -57,7 +57,9 @@ var Server = cli.Command{
 		r.Handle("/v1/challenges", api.Auth(meta.ChallengeListHandler)).Methods("GET")
 		r.Handle("/v1/challenges/{id}", api.Auth(meta.ChallengeGetHandler)).Methods("GET")
 
-		r.Handle("/v1/user", api.Auth(meta.AddBankUser)).Methods("POST")
+		r.Handle("/v1/bank", api.Auth(meta.BankGetData)).Methods("GET")
+
+		r.Handle("/v1/user/bankuser", api.Auth(meta.AddBankUser)).Methods("POST")
 
 		r.Handle("/v1/user", api.Auth(meta.GetUserHandler)).Methods("GET")
 		r.Handle("/v1/user", &api.CreateUserHandler{Meta: meta}).Methods("POST")

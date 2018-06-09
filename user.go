@@ -14,5 +14,5 @@ type User struct {
 type BankUser struct {
 	Username string `json:"username" validate:"nonzero"`
 	Password string `json:"password" validate:"nonzero"`
-	Email    string `json:"emails" validate:"nonzero"`
+	Email    string `json:"email" validate:"nonzero"`
 }
