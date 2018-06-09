@@ -2,7 +2,6 @@ package api
 
 import (
 	"net/http"
-	"github.com/BeyondBankingDays/minions-api/ext/bb"
 	"github.com/BeyondBankingDays/minions-api"
 	"log"
 	"github.com/gorilla/mux"
@@ -74,13 +73,13 @@ func (h *Meta) BankSyncData(w http.ResponseWriter, r *http.Request) {
 
 func (h *Meta) bankSyncData(user *hackathon_api.User)  {
 	for _, bankUser := range user.BankUsers {
-		tokenResponse, err := bb.Login(bankUser)
+		tokenResponse, err := bbLogin(bankUser)
 		if err != nil {
 			log.Println("Sync failed because there was a problem with login", err.Error())
 			return
 		}
 
-		conn := bb.Conn{Token: tokenResponse.Token}
+		conn := &bbConn{Token: tokenResponse.Token}
 		accounts, err := conn.GetAccounts()
 		if err != nil {
 			log.Println("Sync failed because there was a problem with getting bankaccounts", err.Error())

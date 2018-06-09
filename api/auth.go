@@ -6,11 +6,34 @@ import (
 	"errors"
 	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 	"github.com/BeyondBankingDays/minions-api"
-	"github.com/BeyondBankingDays/minions-api/ext/gorctx"
+	"context"
 )
 
+// Set assigns value v under key k on given Request r's context.
+func ContextSet(r *http.Request, k, v interface{}) {
+	if v == nil {
+		return
+	}
+	*r = *r.WithContext(context.WithValue(r.Context(), k, v))
+}
+
+// Get retrieves value registered under key k of given Request context.
+func ContextGet(r *http.Request, k interface{}) interface{} {
+	return r.Context().Value(k)
+}
+
+// GetOk retrieves value of key k from the given Request and indicates success or
+// failure in 2nd return value.
+func ContextGetOk(r *http.Request, k interface{}) (v interface{}, ok bool) {
+	if v = ContextGet(r, k); v != nil {
+		ok = true
+	}
+	return
+}
+
+
 func getContextUser(r *http.Request) *hackathon_api.User {
-	if v := gorctx.Get(r, "user"); v != nil {
+	if v := ContextGet(r, "user"); v != nil {
 		if curUser, ok := v.(*hackathon_api.User); ok {
 			return curUser
 		}
@@ -27,7 +50,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		gorctx.Set(r, "user", user)
+		ContextSet(r, "user", user)
 
 		next.ServeHTTP(w, r)
 	}
