@@ -37,6 +37,6 @@ func (m *Meta) AddBankUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	JsonResponse(w, r, http.StatusOK, user.BankUsers)
+	JsonResponse(w, r, http.StatusOK, Received{true, "bank user created"})
 
 }
