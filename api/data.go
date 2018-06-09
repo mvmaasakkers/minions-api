@@ -19,6 +19,12 @@ func (h *Meta) DataHandler(w http.ResponseWriter, r *http.Request) {
 		JsonResponse(w, r, http.StatusOK, hackathon_api.Data{})
 		return
 	}
+
+	if r.Body == nil {
+		JsonResponse(w, r, http.StatusBadRequest, NewApiError("no body given"))
+		return
+	}
+
 	defer r.Body.Close()
 	data := &hackathon_api.Data{}
 

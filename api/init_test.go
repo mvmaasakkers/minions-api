@@ -67,6 +67,9 @@ func init() {
 
 	userFixtures = map[string]*hackathon_api.User{
 		"first": {Id: userId, Username: "first"},
+		"second": {Id: userId, Username: "second"},
+		"third": {Id: userId, Username: "third"},
+		"fourth": {Id: userId, Username: "fourth"},
 	}
 
 	tokenFixtures = map[string]*hackathon_api.Token{
