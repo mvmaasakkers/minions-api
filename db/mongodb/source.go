@@ -14,7 +14,7 @@ type SourceService struct {
 	database *mgo.Database
 }
 
-func (db *DB) NewSourceService() *SourceService {
+func NewSourceService(db *DB) *SourceService {
 	svc := &SourceService{DB: db, Collection: "source", database: db.Session.DB(db.Settings.Database)}
 
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("type"); err != nil {

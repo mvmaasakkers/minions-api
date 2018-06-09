@@ -40,7 +40,7 @@ func (h *CreateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.userService = h.DB.NewUserService()
+	h.userService = mongodb.NewUserService(&h.DB)
 	_, err := h.userService.GetUserByUsername(userBody.Username)
 	if err == nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError("username already in use"))
@@ -85,7 +85,7 @@ func (h *LoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.userService = h.DB.NewUserService()
+	h.userService = mongodb.NewUserService(&h.DB)
 	user, err := h.userService.GetUserByUsername(userBody.Username)
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
@@ -97,7 +97,7 @@ func (h *LoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.tokenService = h.DB.NewTokenService()
+	h.tokenService = mongodb.NewTokenService(&h.DB)
 	token := &hackathon_api.Token{UserId: user.Id.Hex()}
 	if _, err := h.tokenService.CreateToken(token); err != nil {
 		JsonResponse(w, r, http.StatusUnauthorized, NewApiError(err.Error()))

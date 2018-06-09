@@ -6,11 +6,12 @@ import (
 	"github.com/BeyondBankingDays/minions-api"
 	"log"
 	"github.com/gorilla/mux"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 func (h *Meta) BankAccountListHandler(w http.ResponseWriter, r *http.Request) {
 	user := getContextUser(r)
-	bankAccountService := h.DB.NewBankAccountService()
+	bankAccountService := mongodb.NewBankAccountService(&h.DB)
 	bankAccounts, err := bankAccountService.ListBankAccounts(user.Id.Hex())
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
@@ -23,7 +24,7 @@ func (h *Meta) BankAccountListHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *Meta) BankAccountGetHandler(w http.ResponseWriter, r *http.Request) {
 	user := getContextUser(r)
-	bankAccountService := h.DB.NewBankAccountService()
+	bankAccountService := mongodb.NewBankAccountService(&h.DB)
 	vars := mux.Vars(r)
 	if _, ok  := vars["id"]; !ok {
 		JsonResponse(w, r, http.StatusBadRequest, NewApiError("no id given"))
@@ -47,14 +48,14 @@ func (h *Meta) BankTransactionsListHandler(w http.ResponseWriter, r *http.Reques
 	}
 
 	user := getContextUser(r)
-	bankAccountService := h.DB.NewBankAccountService()
+	bankAccountService := mongodb.NewBankAccountService(&h.DB)
 	bankAccount, err := bankAccountService.GetBankAccount(user.Id.Hex(), vars["id"])
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
 		return
 	}
 
-	bankTransactionsService := h.DB.NewBankTransactionService()
+	bankTransactionsService := mongodb.NewBankTransactionService(&h.DB)
 	transactions, err := bankTransactionsService.ListBankTransactionsByAccount(user.Id.Hex(), bankAccount.Id)
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
@@ -86,8 +87,8 @@ func (h *Meta) bankSyncData(user *hackathon_api.User)  {
 			return
 		}
 
-		bankAccountService := h.DB.NewBankAccountService()
-		bankTransactionService := h.DB.NewBankTransactionService()
+		bankAccountService := mongodb.NewBankAccountService(&h.DB)
+		bankTransactionService := mongodb.NewBankTransactionService(&h.DB)
 		for _, account := range accounts.BankAccounts {
 			account.UserID = user.Id.Hex()
 

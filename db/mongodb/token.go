@@ -15,7 +15,7 @@ type TokenService struct {
 	database *mgo.Database
 }
 
-func (db *DB) NewTokenService() *TokenService {
+func NewTokenService(db *DB) *TokenService {
 	svc := &TokenService{DB: db, Collection: "token", database: db.Session.DB(db.Settings.Database)}
 
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("token"); err != nil {

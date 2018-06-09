@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/BeyondBankingDays/minions-api"
 	"gopkg.in/validator.v2"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 
@@ -31,7 +32,7 @@ func (m *Meta) AddBankUser(w http.ResponseWriter, r *http.Request) {
 
 	user.BankUsers = append(user.BankUsers, data)
 
-	userService := m.DB.NewUserService()
+	userService := mongodb.NewUserService(&m.DB)
 	if _, err := userService.EditUser(user); err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
 		return

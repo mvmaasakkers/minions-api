@@ -10,7 +10,7 @@ type ChallengeService struct {
 	database *mgo.Database
 }
 
-func (db *DB) NewChallengeService() *ChallengeService {
+func NewChallengeService(db *DB) *ChallengeService {
 	svc := &ChallengeService{DB: db, Collection: "challenge", database: db.Session.DB(db.Settings.Database)}
 
 	return svc

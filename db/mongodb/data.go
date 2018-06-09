@@ -13,7 +13,7 @@ type DataService struct {
 	database   *mgo.Database
 }
 
-func (db *DB) NewDataService() *DataService {
+func NewDataService(db *DB) *DataService {
 	svc := &DataService{DB: db, Collection: "data", database: db.Session.DB(db.Settings.Database)}
 
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("time"); err != nil {

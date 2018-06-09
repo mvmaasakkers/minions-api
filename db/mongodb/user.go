@@ -15,7 +15,7 @@ type UserService struct {
 	database *mgo.Database
 }
 
-func (db *DB) NewUserService() *UserService {
+func NewUserService(db *DB) *UserService {
 	svc := &UserService{DB: db, Collection: "user", database: db.Session.DB(db.Settings.Database)}
 
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("username"); err != nil {

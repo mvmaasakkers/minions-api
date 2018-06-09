@@ -6,11 +6,12 @@ import (
 	"encoding/json"
 	"gopkg.in/validator.v2"
 	"github.com/gorilla/mux"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 
 func (h *Meta) SourceListHandler(w http.ResponseWriter, r *http.Request) {
-	sourceService := h.DB.NewSourceService()
+	sourceService := mongodb.NewSourceService(&h.DB)
 	sources, err := sourceService.ListSources()
 	if err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
@@ -22,7 +23,7 @@ func (h *Meta) SourceListHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func (h *Meta) SourceGetHandler(w http.ResponseWriter, r *http.Request) {
-	sourceService := h.DB.NewSourceService()
+	sourceService := mongodb.NewSourceService(&h.DB)
 	vars := mux.Vars(r)
 	if _, ok  := vars["id"]; !ok {
 		JsonResponse(w, r, http.StatusBadRequest, NewApiError("no id given"))
@@ -40,7 +41,7 @@ func (h *Meta) SourceGetHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func (h *Meta) SourcePostHandler(w http.ResponseWriter, r *http.Request) {
-	sourceService := h.DB.NewSourceService()
+	sourceService := mongodb.NewSourceService(&h.DB)
 	defer r.Body.Close()
 	source := &hackathon_api.Source{}
 

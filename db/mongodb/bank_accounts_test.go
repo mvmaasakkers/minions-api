@@ -7,7 +7,7 @@ import (
 )
 
 func TestBankAccountService_List(t *testing.T) {
-	bankAccountService := db.NewBankAccountService()
+	bankAccountService := NewBankAccountService(db)
 	_, err := bankAccountService.ListBankAccounts("testuser")
 	if err != nil {
 		t.Errorf("Something went wrong executing List(): %s", err.Error())
@@ -17,7 +17,7 @@ func TestBankAccountService_List(t *testing.T) {
 
 
 func TestBankAccountService_CreateBankAccount(t *testing.T) {
-	bankAccountService := db.NewBankAccountService()
+	bankAccountService := NewBankAccountService(db)
 
 	if _, err := bankAccountService.CreateBankAccount(nil); err == nil {
 		t.Error("Exception was expected")
@@ -41,7 +41,7 @@ func TestBankAccountService_CreateBankAccount(t *testing.T) {
 }
 
 func TestBankAccountService_DeleteBankAccount(t *testing.T) {
-	bankAccountService := db.NewBankAccountService()
+	bankAccountService := NewBankAccountService(db)
 	err := bankAccountService.DeleteBankAccount("testuser", bankAccountFixtures["first"].Id)
 	if err == nil {
 		t.Error("Exception was expected")

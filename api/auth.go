@@ -47,13 +47,13 @@ func AuthToken(tokenVal string)  (*hackathon_api.User, error) {
 		return nil, errors.New("no token given")
 	}
 
-	tokenService := mongodb.Conn.NewTokenService()
+	tokenService := mongodb.NewTokenService(mongodb.Conn)
 	token, err := tokenService.GetTokenByToken(tokenVal)
 	if err != nil {
 		return nil, err
 	}
 
-	userService := mongodb.Conn.NewUserService()
+	userService := mongodb.NewUserService(mongodb.Conn)
 	user, err := userService.GetUser(token.UserId)
 	if err != nil {
 		return nil, err

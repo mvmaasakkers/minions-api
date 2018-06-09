@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"time"
 	"gopkg.in/validator.v2"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 
@@ -33,7 +34,7 @@ func (h *Meta) DataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dataService := h.DB.NewDataService()
+	dataService := mongodb.NewDataService(&h.DB)
 	if _, err := dataService.CreateData(data); err != nil {
 		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
 		return

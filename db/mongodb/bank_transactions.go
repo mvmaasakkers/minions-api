@@ -13,7 +13,7 @@ type BankTransactionService struct {
 	database *mgo.Database
 }
 
-func (db *DB) NewBankTransactionService() *BankTransactionService {
+func NewBankTransactionService(db *DB) *BankTransactionService {
 	svc := &BankTransactionService{DB: db, Collection: "bank_transaction", database: db.Session.DB(db.Settings.Database)}
 
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("user_id"); err != nil {

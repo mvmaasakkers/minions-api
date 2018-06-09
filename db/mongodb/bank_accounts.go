@@ -9,12 +9,12 @@ import (
 )
 
 type BankAccountService struct {
-	DB *DB
+	DB         *DB
 	Collection string
-	database *mgo.Database
+	database   *mgo.Database
 }
 
-func (db *DB) NewBankAccountService() *BankAccountService {
+func NewBankAccountService(db *DB) *BankAccountService {
 	svc := &BankAccountService{DB: db, Collection: "bank_account", database: db.Session.DB(db.Settings.Database)}
 
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("user_id"); err != nil {

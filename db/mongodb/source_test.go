@@ -6,7 +6,7 @@ import (
 )
 
 func TestSourceService_List(t *testing.T) {
-	sourceService := db.NewSourceService()
+	sourceService := NewSourceService(db)
 	sources, err := sourceService.ListSources()
 	if err != nil {
 		t.Errorf("Something went wrong executing List(): %s", err.Error())
@@ -19,7 +19,7 @@ func TestSourceService_List(t *testing.T) {
 }
 
 func TestSourceService_Get(t *testing.T) {
-	sourceService := db.NewSourceService()
+	sourceService := NewSourceService(db)
 	source, err := sourceService.GetSource(sourceFixtures["first"].Id.Hex())
 	if err != nil {
 		t.Errorf("Something went wrong executing List(): %s", err.Error())
@@ -32,7 +32,7 @@ func TestSourceService_Get(t *testing.T) {
 }
 
 func TestSourceService_EditSource(t *testing.T) {
-	sourceService := db.NewSourceService()
+	sourceService := NewSourceService(db)
 	_, err := sourceService.EditSource(nil)
 	if err == nil {
 		t.Error("Exception was expected")
@@ -54,7 +54,7 @@ func TestSourceService_EditSource(t *testing.T) {
 }
 
 func TestSourceService_CreateSource(t *testing.T) {
-	sourceService := db.NewSourceService()
+	sourceService := NewSourceService(db)
 
 	if _, err := sourceService.CreateSource(nil); err == nil {
 		t.Error("Exception was expected")
@@ -76,7 +76,7 @@ func TestSourceService_CreateSource(t *testing.T) {
 }
 
 func TestSourceService_DeleteSource(t *testing.T) {
-	sourceService := db.NewSourceService()
+	sourceService := NewSourceService(db)
 	err := sourceService.DeleteSource("")
 	if err == nil {
 		t.Error("Exception was expected")

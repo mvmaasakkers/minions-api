@@ -62,13 +62,13 @@ var bankAccountFixtures = map[string]*hackathon_api.BankAccount{
 }
 
 func installFixtures(db *DB) {
-	sourceService := db.NewSourceService()
+	sourceService := NewSourceService(db)
 	for _, item := range sourceFixtures {
 		if _, err := sourceService.CreateSource(item); err != nil {
 			log.Println(err)
 		}
 	}
-	bankAccountService := db.NewBankAccountService()
+	bankAccountService := NewBankAccountService(db)
 	for _, item := range bankAccountFixtures {
 		if err := bankAccountService.database.C("bank_account").Insert(item); err != nil {
 			log.Println(err)
