@@ -13,7 +13,7 @@ type DataHandler struct {
 	Meta
 }
 
-func (h *DataHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *Meta) DataHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
 		JsonResponse(w, r, http.StatusOK, hackathon_api.Data{})
 		return

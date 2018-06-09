@@ -9,18 +9,8 @@ import (
 	"gopkg.in/validator.v2"
 )
 
-type GetUserHandler struct {
-	Meta
-	userService *mongodb.UserService
-}
-
-func (h *GetUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	user, err := AuthHeader(r.Header.Get("Authorization"))
-	if user == nil {
-		JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
-		return
-	}
-
+func (h *Meta) GetUserHandler(w http.ResponseWriter, r *http.Request) {
+	user := getContextUser(r)
 	user.Password = ""
 	JsonResponse(w, r, http.StatusOK, user)
 }

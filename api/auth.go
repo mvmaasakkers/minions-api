@@ -6,8 +6,17 @@ import (
 	"errors"
 	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 	"github.com/BeyondBankingDays/minions-api"
-	"context"
+	"github.com/BeyondBankingDays/minions-api/ext/gorctx"
 )
+
+func getContextUser(r *http.Request) *hackathon_api.User {
+	if v := gorctx.Get(r, "user"); v != nil {
+		if curUser, ok := v.(*hackathon_api.User); ok {
+			return curUser
+		}
+	}
+	return nil
+}
 
 
 func Auth(next http.HandlerFunc) http.HandlerFunc {
@@ -18,9 +27,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		c := context.Background()
-
-		r.WithContext(context.WithValue(c, "user", user))
+		gorctx.Set(r, "user", user)
 
 		next.ServeHTTP(w, r)
 	}

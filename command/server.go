@@ -48,15 +48,15 @@ var Server = cli.Command{
 
 		meta := api.Meta{DB: db}
 
-		r.Handle("/v1/data", &api.DataHandler{Meta: meta}).Methods("POST", "OPTIONS")
-		r.Handle("/v1/sources", &api.SourceListHandler{Meta: meta}).Methods("GET")
-		r.Handle("/v1/sources/{id}", &api.SourceGetHandler{Meta: meta}).Methods("GET")
-		r.Handle("/v1/sources", &api.SourcePostHandler{Meta: meta}).Methods("POST")
+		r.HandleFunc("/v1/data", meta.DataHandler).Methods("POST", "OPTIONS")
+		r.Handle("/v1/sources", api.Auth(meta.SourceListHandler)).Methods("GET")
+		r.Handle("/v1/sources/{id}", api.Auth(meta.SourceGetHandler)).Methods("GET")
+		r.Handle("/v1/sources", api.Auth(meta.SourcePostHandler)).Methods("POST")
 
-		r.Handle("/v1/challenges", &api.ChallengeListHandler{Meta: meta}).Methods("GET")
-		r.Handle("/v1/challenges/{id}", &api.ChallengeGetHandler{Meta: meta}).Methods("GET")
+		r.Handle("/v1/challenges", api.Auth(meta.ChallengeListHandler)).Methods("GET")
+		r.Handle("/v1/challenges/{id}", api.Auth(meta.ChallengeGetHandler)).Methods("GET")
 
-		r.Handle("/v1/user", &api.GetUserHandler{Meta: meta}).Methods("GET")
+		r.Handle("/v1/user", api.Auth(meta.GetUserHandler)).Methods("GET")
 		r.Handle("/v1/user", &api.CreateUserHandler{Meta: meta}).Methods("POST")
 		r.Handle("/v1/token", &api.LoginHandler{Meta: meta}).Methods("POST")
 
