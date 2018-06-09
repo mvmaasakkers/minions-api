@@ -4,26 +4,14 @@ import (
 	"net/http"
 	"fmt"
 	"encoding/json"
+	"github.com/BeyondBankingDays/minions-api"
 )
 
-type Account struct {
-	Id     string `json:"id"`
-	Label  string `json:"label"`
-	BankID string `json:"bank_id"`
-	AccountRouting struct {
-		Scheme  string `json:"scheme"`
-		Address string `json:"address"`
-	} `json:"account_routing"`
-}
 
-type Accounts struct {
-	Accounts []Account `json:"accounts"`
-}
-
-func (c *Conn) GetAccounts() ([]Account, error) {
+func (c *Conn) GetAccounts() (*hackathon_api.BankAccounts, error) {
 	authHeader := fmt.Sprintf(`DirectLogin token="%s"`, c.Token)
 
-	accounts := Accounts{}
+	accounts := &hackathon_api.BankAccounts{}
 
 	client := http.Client{}
 	req, err := http.NewRequest("GET", BaseURL+"/obp/v3.0.0/my/accounts", nil)
@@ -39,9 +27,9 @@ func (c *Conn) GetAccounts() ([]Account, error) {
 	}
 
 	defer resp.Body.Close()
-	if err := json.NewDecoder(resp.Body).Decode(&accounts); err != nil {
+	if err := json.NewDecoder(resp.Body).Decode(accounts); err != nil {
 		return nil, err
 	}
 
-	return accounts.Accounts, nil
+	return accounts, nil
 }
