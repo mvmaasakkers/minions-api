@@ -146,29 +146,47 @@ type LoginHandler struct {
 	tokenService *mongodb.TokenService
 }
 
+func (h *LoginHandler) Validate(w http.ResponseWriter, r *http.Request) (*UserRequestBody, error){
+	userBody := &UserRequestBody{}
+	if err := json.NewDecoder(r.Body).Decode(&userBody); err != nil {
+		return nil, err
+	}
+
+	if errs := validator.Validate(userBody); errs != nil {
+		return nil, errs
+	}
+
+	return userBody, nil
+}
+
+func (h *LoginHandler) Auth(w http.ResponseWriter, r *http.Request, userBody *UserRequestBody) (*hackathon_api.User, error) {
+	h.userService = mongodb.NewUserService(&h.DB)
+	user, err := h.userService.GetUserByUsername(userBody.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userBody.Password)); err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func (h *LoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	userBody := UserRequestBody{}
-	if err := json.NewDecoder(r.Body).Decode(&userBody); err != nil {
+	userBody, err := h.Validate(w, r)
+	if err != nil {
 		JsonResponse(w, r, http.StatusBadRequest, NewApiError(err.Error()))
 		return
 	}
 
-	if errs := validator.Validate(userBody); errs != nil {
-		JsonResponse(w, r, http.StatusBadRequest, NewApiError(errs.Error()))
-		return
-	}
-
-	h.userService = mongodb.NewUserService(&h.DB)
-	user, err := h.userService.GetUserByUsername(userBody.Username)
+	user, err := h.Auth(w, r, userBody)
 	if err != nil {
-		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
-		return
-	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(userBody.Password)); err != nil {
-		JsonResponse(w, r, http.StatusUnauthorized, NewApiError(err.Error()))
-		return
+		if err != nil {
+			JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
+			return
+		}
 	}
 
 	h.tokenService = mongodb.NewTokenService(&h.DB)
