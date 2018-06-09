@@ -12,7 +12,7 @@ type User struct {
 }
 
 type BankUser struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"emails"`
+	Username string `json:"username" validate:"nonzero"`
+	Password string `json:"password" validate:"nonzero"`
+	Email    string `json:"emails" validate:"nonzero"`
 }
