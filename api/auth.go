@@ -73,13 +73,13 @@ func AuthToken(tokenVal string)  (*hackathon_api.User, error) {
 	tokenService := mongodb.NewTokenService(mongodb.Conn)
 	token, err := tokenService.GetTokenByToken(tokenVal)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("token "+ err.Error())
 	}
 
 	userService := mongodb.NewUserService(mongodb.Conn)
 	user, err := userService.GetUser(token.UserId)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("user "+ err.Error())
 	}
 
 	return user, nil

@@ -7,6 +7,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"math/rand"
 	"time"
+	"github.com/kr/pretty"
 )
 
 type UserService struct {
@@ -63,6 +64,7 @@ func (s *UserService) DeleteUser(id string) (error) {
 func (s *UserService) GetUser(id string) (*hackathon_api.User, error) {
 	bsonId := bson.ObjectIdHex(id)
 	user := &hackathon_api.User{}
+	pretty.Print(s)
 	if err := s.database.C(s.Collection).FindId(bsonId).One(user); err != nil {
 		return nil, err
 	}

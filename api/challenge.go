@@ -10,7 +10,7 @@ import (
 func (h *Meta) ChallengeListHandler(w http.ResponseWriter, r *http.Request) {
 	challenges := make([]*hackathon_api.Challenge, 0)
 
-	challenges = append(challenges, &hackathon_api.Challenge{Name: "test"})
+	challenges = append(challenges, &hackathon_api.Challenge{Name: "fixtures"})
 	JsonResponse(w, r, http.StatusOK, challenges)
 }
 

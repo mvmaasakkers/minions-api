@@ -1,4 +1,4 @@
-package mongodb
+package api
 
 import (
 	"io/ioutil"
@@ -10,6 +10,7 @@ import (
 	"log"
 	"github.com/BeyondBankingDays/minions-api"
 	"gopkg.in/mgo.v2/bson"
+	"github.com/BeyondBankingDays/minions-api/db/mongodb"
 )
 
 var (
@@ -18,7 +19,7 @@ var (
 	// testDb provides a disposable profile.DB implementation.
 	session *mgo.Session
 
-	db *DB
+	db *mongodb.DB
 )
 
 // TestMain wraps all tests with the needed initialized mock DB and fixtures
@@ -42,37 +43,72 @@ func runTests(m *testing.M, tempDir string) int {
 		server.Stop()
 	}()
 
-	db = &DB{}
+	db = &mongodb.DB{}
 	db.Session = session
 	db.Settings.Database = "api_test"
 
+	mongodb.Conn = db
 	installFixtures(db)
 
 	return m.Run()
 }
 
-var sourceFixtures = map[string]*hackathon_api.Source{
-	"first": {Id: bson.NewObjectId(), Name: "first"},
-	"second": {Id: bson.NewObjectId(), Name: "second"},
-}
+var sourceFixtures map[string]*hackathon_api.Source
 
 var bankAccountFixtures = map[string]*hackathon_api.BankAccount{
 	"first": {Id: "first", Label: "first", UserID: "tesuser"},
 	"second": {Id: "second", Label: "second", UserID: "tesuser"},
 }
 
-func installFixtures(db *DB) {
-	sourceService := NewSourceService(db)
+var userId bson.ObjectId
+
+func init() {
+	userId = bson.NewObjectId()
+
+	userFixtures = map[string]*hackathon_api.User{
+		"first": {Id: userId, Username: "first"},
+	}
+
+	tokenFixtures = map[string]*hackathon_api.Token{
+		"first": {Id: bson.NewObjectId(), UserId: userId.Hex(), Token: "first"},
+	}
+
+	sourceFixtures = map[string]*hackathon_api.Source{
+		"first": {Id: bson.NewObjectId(), Name: "first"},
+		"second": {Id: bson.NewObjectId(), Name: "second"},
+	}
+}
+
+
+var userFixtures map[string]*hackathon_api.User
+
+var tokenFixtures map[string]*hackathon_api.Token
+
+func installFixtures(db *mongodb.DB) {
+	sourceService := mongodb.NewSourceService(db)
 	for _, item := range sourceFixtures {
 		if _, err := sourceService.CreateSource(item); err != nil {
 			log.Println(err)
 		}
 	}
-	bankAccountService := NewBankAccountService(db)
+	bankAccountService := mongodb.NewBankAccountService(db)
 	for _, item := range bankAccountFixtures {
-		if err := bankAccountService.database.C("bank_account").Insert(item); err != nil {
+		if err := bankAccountService.DB.Session.DB(db.Settings.Database).C("bank_account").Insert(item); err != nil {
 			log.Println(err)
 		}
 	}
 
+	userService := mongodb.NewUserService(db)
+	for _, item := range userFixtures {
+		if _, err := userService.CreateUser(item); err != nil {
+			log.Println(err)
+		}
+	}
+
+	tokenService := mongodb.NewTokenService(db)
+	for _, item := range tokenFixtures {
+		if _, err := tokenService.CreateToken(item); err != nil {
+			log.Println(err)
+		}
+	}
 }

@@ -22,8 +22,6 @@ func NewTokenService(db *DB) *TokenService {
 		log.Println("Could not create index", err)
 	}
 
-
-
 	if err := svc.database.C(svc.Collection).EnsureIndexKey("expires_at"); err != nil {
 		log.Println("Could not create index", err)
 	}
@@ -34,7 +32,9 @@ func (s *TokenService) CreateToken(token *hackathon_api.Token) (*hackathon_api.T
 	token.Id = bson.NewObjectId()
 	token.CreatedAt = time.Now()
 	token.ExpiresAt = time.Now().Add(time.Hour * 72)
-	token.Token = generateToken()
+	if token.Token == "" {
+		token.Token = generateToken()
+	}
 
 	if err := s.database.C(s.Collection).Insert(token); err != nil {
 		return nil, err
