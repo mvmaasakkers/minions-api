@@ -12,7 +12,7 @@ env:
 
 script: # the build step
   - go test -v ./...
-  - go build -o ./build/api cmd/main.go
+  - CGO_ENABLED=0 go build -o ./build/api cmd/main.go
 
 cache:
   directories:
