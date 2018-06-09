@@ -28,5 +28,6 @@ after_success:
   # Push to Google container registry
   - docker build -t eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT .
   - gcloud auth configure-docker
+  - gcloud container clusters get-credentials hackathon
   - docker push eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT
   - if [ "master" == $TRAVIS_BRANCH ]; then kubectl set image deployment/api api=eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT; fi
