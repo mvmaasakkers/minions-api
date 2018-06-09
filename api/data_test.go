@@ -187,6 +187,136 @@ func TestMeta_DataHandler(t *testing.T) {
     "event": "",
     "data": {}
 }`)),
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "",
+    "data": {}
+}`)),
+			StatusCode: http.StatusBadRequest,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "adsf",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "asdf",
+    "data": {}
+}`)),
+			StatusCode: http.StatusCreated,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "",
+    "data": {}
+}`)),
+			StatusCode: http.StatusBadRequest,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "adsf",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "asdf",
+    "data": {}
+}`)),
+			StatusCode: http.StatusCreated,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "",
+    "data": {}
+}`)),
+			StatusCode: http.StatusBadRequest,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "adsf",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "asdf",
+    "data": {}
+}`)),
+			StatusCode: http.StatusCreated,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "",
+    "data": {}
+}`)),
+			StatusCode: http.StatusBadRequest,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "adsf",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "asdf",
+    "data": {}
+}`)),
+			StatusCode: http.StatusCreated,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "1",
+        "type": "adsf"
+    },
+    "type": "adsf",
+    "event": "1",
+    "data": {}
+}`)),
+			StatusCode: http.StatusCreated,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "ad1sf",
+        "type": "advsf"
+    },
+    "type": "adsaf",
+    "event": "asdf",
+    "data": {}
+}`)),
+			StatusCode: http.StatusCreated,
+		},
+		{
+			Body: bytes.NewReader([]byte(`{
+    "source": {
+        "id": "f3f",
+        "type": "asf"
+    },
+    "type": "adsf",
+    "event": "",
+    "data": {}
+}`)),
 			StatusCode: http.StatusBadRequest,
 		},
 	}
