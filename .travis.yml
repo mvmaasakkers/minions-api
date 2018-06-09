@@ -31,4 +31,4 @@ after_success:
   - docker build -t eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT .
   - gcloud container clusters get-credentials hackathon
   - gcloud docker -- push eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT
-#  - if [ "master" == $TRAVIS_BRANCH ]; then kubectl set image deployment/api api=eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT; fi
+  - if [ "master" == $TRAVIS_BRANCH ]; then kubectl set image deployment/api api=eu.gcr.io/bb-hackathon/api:$TRAVIS_COMMIT; fi
