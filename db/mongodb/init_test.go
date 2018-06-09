@@ -56,6 +56,11 @@ var sourceFixtures = map[string]*hackathon_api.Source{
 	"second": {Id: bson.NewObjectId(), Name: "second"},
 }
 
+var bankAccountFixtures = map[string]*hackathon_api.BankAccount{
+	"first": {Id: "first", Label: "first", UserID: "tesuser"},
+	"second": {Id: "second", Label: "second", UserID: "tesuser"},
+}
+
 func installFixtures(db *DB) {
 	sourceService := db.NewSourceService()
 	for _, item := range sourceFixtures {
@@ -63,4 +68,11 @@ func installFixtures(db *DB) {
 			log.Println(err)
 		}
 	}
+	bankAccountService := db.NewBankAccountService()
+	for _, item := range bankAccountFixtures {
+		if err := bankAccountService.database.C("bank_account").Insert(item); err != nil {
+			log.Println(err)
+		}
+	}
+
 }

@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"testing"
+	"github.com/BeyondBankingDays/minions-api"
 )
 
 func TestSourceService_List(t *testing.T) {
@@ -52,6 +53,27 @@ func TestSourceService_EditSource(t *testing.T) {
 
 }
 
+func TestSourceService_CreateSource(t *testing.T) {
+	sourceService := db.NewSourceService()
+
+	if _, err := sourceService.CreateSource(nil); err == nil {
+		t.Error("Exception was expected")
+		t.FailNow()
+	}
+
+	source := &hackathon_api.Source{}
+	source.Name = "Test"
+
+	if _, err := sourceService.CreateSource(source); err != nil {
+		t.Error("Exception was given and not expected", err.Error())
+		t.FailNow()
+	}
+
+	if _, err := sourceService.GetSource(source.Id.Hex()); err != nil {
+		t.Error("Exception was given and not expected", err.Error())
+	}
+
+}
 
 func TestSourceService_DeleteSource(t *testing.T) {
 	sourceService := db.NewSourceService()

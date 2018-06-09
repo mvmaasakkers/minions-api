@@ -25,6 +25,9 @@ func (db *DB) NewSourceService() *SourceService {
 }
 
 func (s *SourceService) CreateSource(source *hackathon_api.Source) (*hackathon_api.Source, error) {
+	if source == nil {
+		return nil, errors.New("cannot be nil")
+	}
 	source.Id = bson.NewObjectId()
 	if err := s.database.C(s.Collection).Insert(source); err != nil {
 		return nil, err

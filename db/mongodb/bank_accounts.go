@@ -5,6 +5,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"log"
+	"errors"
 )
 
 type BankAccountService struct {
@@ -24,6 +25,9 @@ func (db *DB) NewBankAccountService() *BankAccountService {
 }
 
 func (s *BankAccountService) CreateBankAccount(bankAccount *hackathon_api.BankAccount) (*hackathon_api.BankAccount, error) {
+	if bankAccount == nil {
+		return nil, errors.New("cannot be nil")
+	}
 	if _, err := s.database.C(s.Collection).UpsertId(bankAccount.Id, bankAccount); err != nil {
 		return nil, err
 	}
