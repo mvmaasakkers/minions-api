@@ -15,6 +15,11 @@ type SourceListHandler struct {
 }
 
 func (h *SourceListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user, err := AuthHeader(r.Header.Get("Authorization"))
+	if user == nil {
+		JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
+		return
+	}
 	h.sourceService = h.DB.NewSourceService()
 	sources, err := h.sourceService.ListSources()
 	if err != nil {
@@ -31,6 +36,11 @@ type SourceGetHandler struct {
 }
 
 func (h *SourceGetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user, err := AuthHeader(r.Header.Get("Authorization"))
+	if user == nil {
+		JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
+		return
+	}
 	h.sourceService = h.DB.NewSourceService()
 	vars := mux.Vars(r)
 	if _, ok  := vars["id"]; !ok {
@@ -53,6 +63,11 @@ type SourcePostHandler struct {
 }
 
 func (h *SourcePostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user, err := AuthHeader(r.Header.Get("Authorization"))
+	if user == nil {
+		JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
+		return
+	}
 	h.sourceService = h.DB.NewSourceService()
 	defer r.Body.Close()
 	source := &hackathon_api.Source{}

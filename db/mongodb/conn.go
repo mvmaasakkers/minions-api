@@ -17,6 +17,8 @@ type DB struct {
 	}
 }
 
+var Conn *DB
+
 func (d *DB) Open() error {
 	// Only open session if none is set yet (for testing)
 	if d.Session == nil {
@@ -30,6 +32,8 @@ func (d *DB) Open() error {
 			return err
 		}
 	}
+
+	Conn = d
 
 	return nil
 }

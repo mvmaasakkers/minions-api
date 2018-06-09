@@ -15,7 +15,7 @@ var Server = cli.Command{
 	Flags: []cli.Flag{
 		cli.StringFlag{
 			Name:   "port",
-			Value:  "8080",
+			Value:  "8081",
 			Usage:  "Port number",
 			EnvVar: "PORT",
 		},
@@ -55,6 +55,10 @@ var Server = cli.Command{
 
 		r.Handle("/v1/challenges", &api.ChallengeListHandler{Meta: meta}).Methods("GET")
 		r.Handle("/v1/challenges/{id}", &api.ChallengeGetHandler{Meta: meta}).Methods("GET")
+
+		r.Handle("/v1/user", &api.GetUserHandler{Meta: meta}).Methods("GET")
+		r.Handle("/v1/user", &api.CreateUserHandler{Meta: meta}).Methods("POST")
+		r.Handle("/v1/token", &api.LoginHandler{Meta: meta}).Methods("POST")
 
 		http.Handle("/", r)
 

@@ -13,6 +13,11 @@ type ChallengeListHandler struct {
 }
 
 func (h *ChallengeListHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user, err := AuthHeader(r.Header.Get("Authorization"))
+	if user == nil {
+		JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
+		return
+	}
 	challenges := make([]*hackathon_api.Challenge, 0)
 
 	challenges = append(challenges, &hackathon_api.Challenge{Name: "test"})
@@ -25,6 +30,11 @@ type ChallengeGetHandler struct {
 }
 
 func (h *ChallengeGetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	user, err := AuthHeader(r.Header.Get("Authorization"))
+	if user == nil {
+		JsonResponse(w, r, http.StatusForbidden, NewApiError(err.Error()))
+		return
+	}
 	vars := mux.Vars(r)
 	if _, ok  := vars["id"]; !ok {
 		JsonResponse(w, r, http.StatusBadRequest, NewApiError("no id given"))
