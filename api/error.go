@@ -5,11 +5,13 @@ import (
 )
 
 type ApiError struct {
+	Success bool   `json:"success"`
 	Message string `json:"message"`
 }
 
 func NewApiError(message string) ApiError {
 	return ApiError{
+		Success: false,
 		Message: message,
 	}
 }

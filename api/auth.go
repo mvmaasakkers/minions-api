@@ -46,7 +46,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, err := AuthHeader(r.Header.Get("Authorization"))
 		if err != nil {
-			JsonResponse(w, r, http.StatusUnauthorized, ApiError{err.Error()})
+			JsonResponse(w, r, http.StatusUnauthorized, NewApiError(err.Error()))
 			return
 		}
 

@@ -5,15 +5,12 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"gopkg.in/mgo.v2/bson"
-	"math/rand"
-	"time"
-	"github.com/kr/pretty"
 )
 
 type UserService struct {
-	DB *DB
+	DB         *DB
 	Collection string
-	database *mgo.Database
+	database   *mgo.Database
 }
 
 func NewUserService(db *DB) *UserService {
@@ -64,26 +61,16 @@ func (s *UserService) DeleteUser(id string) (error) {
 func (s *UserService) GetUser(id string) (*hackathon_api.User, error) {
 	bsonId := bson.ObjectIdHex(id)
 	user := &hackathon_api.User{}
-	pretty.Print(s)
+
 	if err := s.database.C(s.Collection).FindId(bsonId).One(user); err != nil {
 		return nil, err
 	}
 
-	if user.Score.Current == 0 {
-		user.Score.Current = randomInt(1000, 99999)
-		if err := s.database.C(s.Collection).UpdateId(user.Id, user); err != nil {
-			return nil, err
-		}
+	if user.Challenges == nil {
+		user.Challenges = []string{}
 	}
 
 	return user, nil
-}
-
-
-func randomInt(min int, max int) int {
-	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	p := r.Perm(max - min + 1)
-	return p[min]
 }
 
 func (s *UserService) GetUserByUsername(username string) (*hackathon_api.User, error) {

@@ -55,7 +55,8 @@ var Server = cli.Command{
 		r.Handle("/v1/sources", api.Auth(meta.SourcePostHandler)).Methods("POST")
 
 		r.Handle("/v1/challenges", api.Auth(meta.ChallengeListHandler)).Methods("GET")
-		r.Handle("/v1/challenges/{id}", api.Auth(meta.ChallengeGetHandler)).Methods("GET")
+		r.Handle("/v1/user/challenge/{id}", api.Auth(meta.UserDoChallengeHandler)).Methods("POST")
+		r.Handle("/v1/user/pay", api.Auth(meta.UserPayHandler)).Methods("POST")
 
 		r.Handle("/v1/bank/sync", api.Auth(meta.BankSyncData)).Methods("POST")
 
@@ -63,12 +64,14 @@ var Server = cli.Command{
 		r.Handle("/v1/bank/accounts/{id}", api.Auth(meta.BankAccountGetHandler)).Methods("GET")
 		r.Handle("/v1/bank/accounts/{id}/transactions", api.Auth(meta.BankTransactionsListHandler)).Methods("GET")
 
-
 		r.Handle("/v1/user/bankuser", api.Auth(meta.AddBankUser)).Methods("POST")
 
 		r.Handle("/v1/user", api.Auth(meta.GetUserHandler)).Methods("GET")
 		r.Handle("/v1/user", &api.CreateUserHandler{Meta: meta}).Methods("POST")
 		r.Handle("/v1/token", &api.LoginHandler{Meta: meta}).Methods("POST")
+
+		r.HandleFunc("/v1/properties/{id}", api.PropertiesHandler).Methods("GET")
+
 
 
 		handler := cors.New(cors.Options{
