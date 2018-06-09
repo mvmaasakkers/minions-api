@@ -125,11 +125,7 @@ func (h *CreateUserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pw, err := bcrypt.GenerateFromPassword([]byte(userBody.Password), 10)
-	if err != nil {
-		JsonResponse(w, r, http.StatusInternalServerError, NewApiError(err.Error()))
-		return
-	}
+	pw, _ := bcrypt.GenerateFromPassword([]byte(userBody.Password), 10)
 
 	user := &hackathon_api.User{
 		Username: userBody.Username,

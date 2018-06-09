@@ -86,33 +86,38 @@ func (h *Meta) bankSyncData(user *hackathon_api.User)  {
 			return
 		}
 
-		bankAccountService := mongodb.NewBankAccountService(&h.DB)
-		bankTransactionService := mongodb.NewBankTransactionService(&h.DB)
 		for _, account := range accounts.BankAccounts {
-			account.UserID = user.Id.Hex()
-
-
-			transactions, err := conn.GetTransactions(account)
-			if err != nil {
-				log.Println("Sync failed because there was a problem with getting transactions", err.Error())
-				return
-			}
-
-			i := 0
-
-			for _, transaction := range transactions.BankTransactions {
-				transaction.UserID = user.Id.Hex()
-				if _, err := bankTransactionService.CreateBankTransaction(&transaction); err != nil {
-					log.Println("Error upserting transaction", err.Error())
-				}
-				i++
-			}
-
-			account.Transactions = i
-
-			if _, err := bankAccountService.CreateBankAccount(&account); err != nil {
-				log.Println("Error upserting bankaccount", err.Error())
-			}
+			h.bankSyncLoop(conn, user, account)
 		}
+	}
+}
+
+func (h *Meta) bankSyncLoop(conn *bbConn, user *hackathon_api.User, account hackathon_api.BankAccount) {
+	bankAccountService := mongodb.NewBankAccountService(&h.DB)
+	bankTransactionService := mongodb.NewBankTransactionService(&h.DB)
+
+	account.UserID = user.Id.Hex()
+
+
+	transactions, err := conn.GetTransactions(account)
+	if err != nil {
+		log.Println("Sync failed because there was a problem with getting transactions", err.Error())
+		return
+	}
+
+	i := 0
+
+	for _, transaction := range transactions.BankTransactions {
+		transaction.UserID = user.Id.Hex()
+		if _, err := bankTransactionService.CreateBankTransaction(&transaction); err != nil {
+			log.Println("Error upserting transaction", err.Error())
+		}
+		i++
+	}
+
+	account.Transactions = i
+
+	if _, err := bankAccountService.CreateBankAccount(&account); err != nil {
+		log.Println("Error upserting bankaccount", err.Error())
 	}
 }
