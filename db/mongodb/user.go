@@ -5,6 +5,8 @@ import (
 	"gopkg.in/mgo.v2"
 	"log"
 	"gopkg.in/mgo.v2/bson"
+	"math/rand"
+	"time"
 )
 
 type UserService struct {
@@ -65,10 +67,22 @@ func (s *UserService) GetUser(id string) (*hackathon_api.User, error) {
 		return nil, err
 	}
 
+	if user.Score.Current == 0 {
+		user.Score.Current = randomInt(1000, 99999)
+		if err := s.database.C(s.Collection).UpdateId(user.Id, user); err != nil {
+			return nil, err
+		}
+	}
+
 	return user, nil
 }
 
 
+func randomInt(min int, max int) int {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	p := r.Perm(max - min + 1)
+	return p[min]
+}
 
 func (s *UserService) GetUserByUsername(username string) (*hackathon_api.User, error) {
 	user := &hackathon_api.User{}

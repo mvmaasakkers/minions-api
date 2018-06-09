@@ -8,7 +8,12 @@ type User struct {
 	Password string        `json:"password,omitempty"`
 	Email    string        `json:"email"`
 
+	Score     UserScore  `json:"score"`
 	BankUsers []BankUser `json:"bankusers"`
+}
+
+type UserScore struct {
+	Current int `json:"current"`
 }
 
 type BankUser struct {

@@ -12,8 +12,10 @@ import (
 func (h *Meta) GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	user := getContextUser(r)
 	user.Password = ""
+
 	JsonResponse(w, r, http.StatusOK, user)
 }
+
 
 type CreateUserHandler struct {
 	Meta
