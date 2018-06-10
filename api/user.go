@@ -170,6 +170,8 @@ func (h *LoginHandler) Auth(w http.ResponseWriter, r *http.Request, userBody *Us
 		return nil, err
 	}
 
+	h.UserResetHandler(w, r, user)
+
 	return user, nil
 }
 
@@ -197,4 +199,19 @@ func (h *LoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JsonResponse(w, r, http.StatusOK, token)
+}
+
+func (h *Meta) UserResetHandler(w http.ResponseWriter, r *http.Request, user *hackathon_api.User) error {
+	user.BankUsers = []hackathon_api.BankUser{{Username:"Robert.Nl.03", Password: "X!79877297", Email: "robert.nl.03@x.y"}}
+	user.Challenges = []string{}
+	user.Score.Current = 0
+
+	userService := mongodb.NewUserService(&h.DB)
+	if _, err := userService.EditUser(user); err != nil {
+		return err
+	}
+
+	ContextSet(r, "user", user)
+
+	return nil
 }
