@@ -22,11 +22,11 @@ func GetChallenge(id string) (*Challenge, error) {
 
 func GetChallenges() []Challenge{
 	return []Challenge{
-		{"zonnecollectoren", "Zonnecollectoren", 350, false},
-		{"energielabel", "Energielabel", 100, false},
-		{"spouwmuur", "Spouwmuur", 500, false},
-		{"vloer_bodem_isolatie", "Vloer bodem isolatie", 350, false},
-		{"dakisolatie", "Dakisolatie", 500, false},
-		{"hr_ketel", "HR ketel", 250, false},
+		{"zonnecollectoren", "Solar collector", 350, false},
+		{"energielabel", "Energylabel", 100, false},
+		{"spouwmuur", "Cavity wall", 500, false},
+		{"vloer_bodem_isolatie", "Floor ground isolation", 350, false},
+		{"dakisolatie", "Roof isolation", 500, false},
+		{"hr_ketel", "HR Boiler", 250, false},
 	}
 }
