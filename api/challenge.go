@@ -2,12 +2,17 @@ package api
 
 import (
 	"net/http"
+
 	"github.com/BeyondBankingDays/minions-api"
 )
 
-
-
 func (h *Meta) ChallengeListHandler(w http.ResponseWriter, r *http.Request) {
-
-	JsonResponse(w, r, http.StatusOK, hackathon_api.Challenges)
+	challenges := hackathon_api.Challenges
+	user := getContextUser(r)
+	for key, challenge := range challenges {
+		if inSlice(challenge.Id, user.Challenges) {
+			challenges[key].Done = true
+		}
+	}
+	JsonResponse(w, r, http.StatusOK, challenges)
 }
