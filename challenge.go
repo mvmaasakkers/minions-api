@@ -9,10 +9,19 @@ type Challenge struct {
 	Done   bool   `json:"done"`
 }
 
-var Challenges []Challenge
+func GetChallenge(id string) (*Challenge, error) {
+	challenges := GetChallenges()
+	for _, challenge := range challenges {
+		if challenge.Id == id {
+			return &challenge, nil
+		}
+	}
 
-func init() {
-	Challenges = []Challenge{
+	return nil, errors.New("not found")
+}
+
+func GetChallenges() []Challenge{
+	return []Challenge{
 		{"zonnecollectoren", "Zonnecollectoren", 350, false},
 		{"energielabel", "Energielabel", 100, false},
 		{"spouwmuur", "Spouwmuur", 500, false},
@@ -20,14 +29,4 @@ func init() {
 		{"dakisolatie", "Dakisolatie", 500, false},
 		{"hr_ketel", "HR ketel", 250, false},
 	}
-}
-
-func GetChallenge(id string) (*Challenge, error) {
-	for _, challenge := range Challenges {
-		if challenge.Id == id {
-			return &challenge, nil
-		}
-	}
-
-	return nil, errors.New("not found")
 }
